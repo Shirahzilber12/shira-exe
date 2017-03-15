@@ -14,11 +14,16 @@ public class MyFile extends File{
         //this.exists();
     }
     public boolean check() {
-            if (!exists()) {
-                System.out.println("Wrong path ");
-                return false;
+            if (exists()) {
+                if (isFile()){
+                    return true;
+                }
+                    else
+                System.out.println("not file");
+               return false;
             }
             else
-                return true;
+                System.out.println("Wrong path ");
+        return false;
         }
 }

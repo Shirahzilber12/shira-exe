@@ -19,8 +19,16 @@ public class Menu {
         select = s.next();
         menu(select);
     }
+public static void scan() {
+    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    try {
+        bufferedReader.readLine();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 
-     static void menu(String mySelect) {
+    static void menu(String mySelect) {
         try {
             switch (Integer.parseInt(mySelect)) {
                 case 1:
@@ -53,13 +61,13 @@ public class Menu {
             start();
         System.out.println("bye bye");
     }
-//C:\Users\hackeru.HACKERU3\Documents\GitHubC:\Users\hackeru.HACKERU3\Documents\GitHub
+    //C:\Users\hackeru.HACKERU3\Documents\GitHubC:\Users\hackeru.HACKERU3\Documents\GitHub
     public static void getFile() {
         MyFile myFile = new MyFile("");
         System.out.println("enter your path");
         Scanner s=new Scanner(System.in);
         myFile = new MyFile(s.next());
-        while (!myFile.check()) {
+        while (!myFile.check(myFile)) {
             getFile();
         }
     }
