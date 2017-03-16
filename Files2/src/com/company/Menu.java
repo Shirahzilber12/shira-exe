@@ -30,16 +30,17 @@ public class Menu {
                 Random random = new Random(System.currentTimeMillis());
                 int key = random.nextInt(255);
                 userInterface.output("Your key is: " + key);
-                Operation encryption=new Encryption();
-                encryption.caesar(file,key);
+                Operation encryption=new Caesar();
+                encryption.encryption(file,key);
                 userInterface.output("your encryption succeed ");
                 start2();
                 break;
             case "2":
+                //פענוח
                 File file1 =getFile();
                 int myKey = insertKey();
-                Operation decryption=new Decryption();
-                decryption.caesar(file1,myKey);
+                Operation decryption=new Caesar();
+                decryption.decryption(file1,myKey);
                 userInterface.output("your decryption succeed ");
                 start2();
                 break;
