@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Random;
 import java.util.Scanner;
 
 import static java.awt.SystemColor.menu;
@@ -16,7 +17,7 @@ public class Menu {
     public static void start() {
         String select ="";
         userInterface.output("please enter your choice:");
-        userInterface.output("1: encryption  \n2: decryption   \n3: exit");
+        userInterface.output("1: encryption  \n2: decryption   \n0: exit");
         select = userInterface.input();
         menu(select);
     }
@@ -25,16 +26,24 @@ public class Menu {
     static void menu(String mySelect) {
         switch (mySelect) {
             case "1":
-                getFile();
-                Encryption.encryptionCaesar();
+                File file =getFile();
+                Random random = new Random(System.currentTimeMillis());
+                int key = random.nextInt(255);
+                userInterface.output("Your key is: " + key);
+                Operation encryption=new Encryption();
+                encryption.caesar(file,key);
+                userInterface.output("your encryption succeed ");
                 start2();
                 break;
             case "2":
-                getFile();
-                Decryption.decryption();
+                File file1 =getFile();
+                int myKey = insertKey();
+                Operation decryption=new Decryption();
+                decryption.caesar(file1,myKey);
+                userInterface.output("your decryption succeed ");
                 start2();
                 break;
-            case "3":
+            case "0":
                 userInterface.output("bye bye");;
                 break;
             default:
@@ -42,33 +51,57 @@ public class Menu {
                 start();
         }
     }
+    static int insertKey(){
+        int key = 0;
+        try {
+            userInterface.output("please enter your key");
+            String keyTemp = scan();
+            key = Integer.parseInt(keyTemp);
+        }
+        catch (NumberFormatException e){
+            userInterface.output("you not enter num ");
+            insertKey();
+        }
+        return key;
+    }
 
 
     public static void start2(){
-        userInterface.output("if you have more files you want to test press 1");
+        userInterface.output("Press 1 to return to main menu");
         String answer = userInterface.input();
-        int num = Integer.parseInt(answer);
-        if(num == 1)
+
+        if(answer.equals("1"))
             start();
         else
-        System.out.println("bye bye");
+        userInterface.output("bye bye");
     }
-    //C:\Users\hackeru.HACKERU3\Documents\GitHubC:\Users\hackeru.HACKERU3\Documents\GitHub\Int.txt
-    public static void getFile() {
-        MyFile myFile = new MyFile("");
+
+    public static MyFile getFile() {
+
         userInterface.output("enter your path");
-        myFile = new MyFile(userInterface.input());
+        MyFile myFile = new MyFile(userInterface.input());
         if (!myFile.check(myFile)){
             getFile();
         }
+        return myFile;
     }
 
-
+    static String scan() {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            return bufferedReader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
     public interface UserInterface {
         void output(String s);
         String input();
     }
+
+
 
 
 }

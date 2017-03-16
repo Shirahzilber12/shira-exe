@@ -1,35 +1,48 @@
 package com.company;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
 //הצפנה
-public class Encryption implements Operation {
+public class Encryption  implements Operation  {
 
-    public static void encryptionCaesar(){
-        Random random = new Random(System.currentTimeMillis());
-        int num = random.nextInt(255);
-        File file = new File("C:\\Users\\hackeru.HACKERU3\\Documents\\GitHub\\shira-exe\\encryption.txt");
-        OutputStream outputStream = null;
-        InputStream inputStream = null;
-        //tryyyy
-        byte number = 20;
-        byte[] buffer = new byte[1];
-        System.out.println("the num before"+ number);
-        int result = number+150;
-        ByteBuffer.wrap(buffer).putInt(result);
+     public void caesar(File file ,int key){
+         String newName=file.getPath().substring(0,file.getPath().lastIndexOf('.'))+".encrypted.txt";
+         File encryption = new File(newName);
+         OutputStream outputStream = null;
+         InputStream inputStream = null;
+         int oneByte;
+        try {
+            //encryption
+            inputStream = new FileInputStream(file);
+            outputStream = new FileOutputStream(encryption);
+            while ((oneByte = inputStream.read())!=-1) {
+                outputStream.write(oneByte+key);
+            }
 
-        int c = (int)buffer[0];
-        System.out.println("num after"+c);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+           if( inputStream!=null)
+               try {
+                   inputStream.close();
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
+            if( outputStream!=null)
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        }
 
 
 
 
-
-       // while (buffer = inputStream.read()!=)
 
     }
 

@@ -15,9 +15,9 @@ class MenuTest {
     void menuTest() {
         Menu.UserInterface userInterface = mock(Menu.UserInterface.class);
         Menu.userInterface = userInterface;
-        when(userInterface.input()).thenReturn("1").thenReturn("3").thenThrow(new Exception());
+        when(userInterface.input()).thenReturn("a");//.thenReturn("1").thenThrow(new Exception());
         Menu.start();
-        verify(userInterface).output("Wrong path");
+        verify(userInterface).output("incorrect option");
     }
 
 
