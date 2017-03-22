@@ -1,17 +1,17 @@
-﻿package com.company;
+package com.company;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
-import java.util.Scanner;
-
-import static java.awt.SystemColor.menu;
 
 
 public class Menu {
 
+    public static final String encryption = "1";
+    public static final String decryption = "2";
+    public static final String EXIT = "0";
     static UserInterface userInterface;
 
     public static void start() {
@@ -25,26 +25,25 @@ public class Menu {
 
     static void menu(String mySelect) {
         switch (mySelect) {
-            case "1":
+            case encryption:
                 File file =getFile();
                 Random random = new Random(System.currentTimeMillis());
                 int key = random.nextInt(255);
                 userInterface.output("Your key is: " + key);
-                Operation encryption=new Caesar();
+                Algorithm encryption=new Caesar();
                 encryption.encryption(file,key);
                 userInterface.output("your encryption succeed ");
-                start2();
+                start();
                 break;
-            case "2":
-                //פענוח
+            case decryption:
                 File file1 =getFile();
                 int myKey = insertKey();
-                Operation decryption=new Caesar();
+                Algorithm decryption=new Caesar();
                 decryption.decryption(file1,myKey);
                 userInterface.output("your decryption succeed ");
-                start2();
+                start();
                 break;
-            case "0":
+            case EXIT:
                 userInterface.output("bye bye");;
                 break;
             default:
@@ -67,24 +66,17 @@ public class Menu {
     }
 
 
-    public static void start2(){
-        userInterface.output("Press 1 to return to main menu");
-        String answer = userInterface.input();
 
-        if(answer.equals("1"))
-            start();
-        else
-        userInterface.output("bye bye");
-    }
 
     public static MyFile getFile() {
-
         userInterface.output("enter your path");
         MyFile myFile = new MyFile(userInterface.input());
-        if (!myFile.check(myFile)){
+        while (!myFile.check(myFile))
+        {
+        userInterface.output("enter your path");
+        myFile = new MyFile(userInterface.input());
             getFile();
         }
-
         return myFile;
     }
 
