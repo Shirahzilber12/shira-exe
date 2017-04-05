@@ -13,17 +13,21 @@ import java.nio.ByteBuffer;
 public class GetMessagesThread extends Thread {
 
     public static final int PORT = 3000;
-    public static final String SERVER_IP = "10.0.11.4";
+    public static final String SERVER_IP = "127.0.0.1";
     public static final int SEND_MESSAGE = 100;
     public static final int GET_MESSAGES = 101;
     public static final int OKAY = 90;
+    public static final int SIGN_UP = 102;
+    public static final int LOGIN = 103;
     private boolean go = true;
     private int lastMessageReceived;
+    private User user;
 
-    public GetMessagesThread() {
+
+    public GetMessagesThread(User user) {
+        this.user = user;
         lastMessageReceived = -1;
     }
-
 
     @Override
     public void run() {
@@ -36,15 +40,26 @@ public class GetMessagesThread extends Thread {
                 inputStream = clientSocket.getInputStream();
                 outputStream = clientSocket.getOutputStream();
                 outputStream.write(GET_MESSAGES);
+                user.stream(outputStream);
                 byte[] lastMessageReceivedBytes = new byte[4];
                 ByteBuffer.wrap(lastMessageReceivedBytes).putInt(lastMessageReceived+1);
                 outputStream.write(lastMessageReceivedBytes);
                 int messageLength;
                 while((messageLength = inputStream.read()) != -1){
                     byte[] messageBytes = new byte[messageLength];
-                    inputStream.read(messageBytes);
+                    int actuallyRead = inputStream.read(messageBytes);
+                    if(actuallyRead != messageLength)
+                        continue;
                     String message = new String(messageBytes);
-                    System.out.println(message);
+                    int senderLength = inputStream.read();
+                    if(senderLength == -1)
+                        continue;
+                    byte[] senderBytes = new byte[senderLength];
+                    actuallyRead = inputStream.read(senderBytes);
+                    if(actuallyRead != senderLength)
+                        continue;
+                    String sender = new String(senderBytes);
+                    System.out.println(sender+": " + message);
                     lastMessageReceived++;
                 }
             } catch (UnknownHostException e) {
@@ -83,4 +98,5 @@ public class GetMessagesThread extends Thread {
         go = false;
         this.interrupt();
     }
+
 }
