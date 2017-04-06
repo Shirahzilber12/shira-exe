@@ -27,14 +27,15 @@ public class Description {
         insertWord();
         char[] chars = new char[10000];
         InputStream inputStream = null;
+        int oneByte;
         int i = 0;
         try {
             inputStream = new FileInputStream(file);
-            byte[] buffer = new byte[2];
+            //byte[] buffer = new byte[2];
             //מטעין את הקובץ למערך
-            while ((inputStream.read(buffer)) != -1) {
-                char word = ByteBuffer.wrap(buffer).getChar();
-                chars[i] = word;
+            while ((oneByte = inputStream.read()) != -1) {
+               // char word = ByteBuffer.wrap(buffer).getChar();
+                chars[i] = (char) oneByte;
             }
             decryption(chars);
 
@@ -48,8 +49,8 @@ public class Description {
     private void decryption(char[] chars) {
         char[] word = new char[25];
         int k = 0;
-        for (int i = 0; i < chars.length; i++) {
-            for (int j = 0; j < 255; i++) {
+        for (int j = 0; j < 255; j++) {
+                for (int i = 0; i < chars.length; i++) {
                 int sum = 0;
                 if ((chars[i] != ' ') || (chars[i] != '.')) {
                     word[k] = (char) (chars[i] + j);
