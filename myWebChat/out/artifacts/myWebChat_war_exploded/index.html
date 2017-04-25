@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>chat</title>
+    <script src="jquery-3.2.1.min.js"></script>
+    <script>
+
+    function btnSend(act) {
+        var message = $('#txtTest1').val();
+        //alert(message);
+        $.get("/MainServlet?action=" + act + "&message=" + message, function (data, status) {
+            //set element
+
+            document.getElementById('txtTest1').value="";
+            if (status == "success") {
+                    $("#divResult").html(status);
+                    //$("#s").show();
+
+
+
+            }
+        });
+    }
+
+    function btnGetMessage(act) {
+        $.get("/MainServlet?action=" + act, function (data, status) {
+            if (status == "success") {
+                if (data.length > 0) {
+                    //data = decodeURIComponent(data);
+                    $("#divResult").html(decodeURIComponent(data));
+                    $("#s").show();
+                }
+            }
+        });
+    }
+</script>
+
+
+
+
+</head>
+<body>
+write message  <input type="text" id="txtTest1">
+<br/>
+<input type="button" id="btnSendMessage" value="send message" onclick="btnSend('send')">
+<input type="button" id="btnGetMessage" value="get message" onclick="btnGetMessage('get')">
+<div id ="s" style="display:none">
+    <p> result</p>
+
+</div>
+<div id="divResult" ></div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+    <script src="jquery-3.2.1.min.js"></script>
+    <script>
+        function btnTest(act,num1,num2) {
+            $.get("/MainServlet?action="+act+"&operand1="+num1+"&operand2="+num2,function (data,status) {
+                 if (status == "success") {
+                     if (data.length > 0) {
+                         $("#divResult").html(data);
+                         $("#s").show();
+                     }
+                 }
+             });
+            //var test = $("#txtTest").val();
+            alert(param1);
+        }
+
+        //$.get("/MainServlet?action="+$("#action").val()+"&operand1="+$("#operand1").val()+"&operand2="+$("#operand2").val()
+    </script>
+</head>
+<body>
+<h1>Welcome to my Calculator</h1>
+<select id="action">
+    <option value="add" >add</option>
+    <option value="subtract">subtract</option>
+    <option value="multiply">multiply</option>
+    <option value="divide">divide</option>
+</select>
+<br/>
+
+num1 <input type="text" id="txtTest1">
+<br/>
+num2 <input type="text" id="txtTest2">
+<br/>
+<br/>
+<input type="button" value="calculate" onclick="btnTest($('#action').val(),$('#txtTest1').val(),$('#txtTest2').val())">
+
+<br/>
+
+<div id ="s" style="display:none">
+    <p> result</p>
+    <div id="divResult" ></div>
+</div>
+
+</body>
+</html>
