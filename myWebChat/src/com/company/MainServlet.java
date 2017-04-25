@@ -1,6 +1,8 @@
 package com.company;
 
+import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +11,15 @@ import java.util.Map;
  */
 public class MainServlet extends javax.servlet.http.HttpServlet {
     String message = "1234";
+    ArrayList<String> arrayList=new ArrayList<>();
+    int counter = 0;
+
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+    }
+
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
 
     }
@@ -27,11 +38,19 @@ public class MainServlet extends javax.servlet.http.HttpServlet {
         }
 
         String action = qs.get("action");
+
+        //get
         if (action.equals("get")){
-            response.getWriter().write(message);
+            String numOfReadMessages=qs.get("num");
+            int num = Integer.valueOf(numOfReadMessages);
+            for (int i = num ; i <counter ; i++) {
+                response.getWriter().write(arrayList.get(i)+'^');
+            }
         }
+        //send
         if (action.equals("send")){
-            message = qs.get("message");
+            arrayList.add( qs.get("message"));
+            counter++;
         }
 
     }

@@ -5,30 +5,41 @@
     <title>chat</title>
     <script src="jquery-3.2.1.min.js"></script>
     <script>
-
-    function btnSend(act) {
+        var count = 0;
+    function btnSend() {
         var message = $('#txtTest1').val();
-        //alert(message);
-        $.get("/MainServlet?action=" + act + "&message=" + message, function (data, status) {
-            //set element
-
-            document.getElementById('txtTest1').value="";
+        $.get("/MainServlet?action=send&message=" + message, function (data, status) {
+           document.getElementById('txtTest1').value="";
             if (status == "success") {
                     $("#divResult").html(status);
-                    //$("#s").show();
-
-
-
             }
+            //btnGetMessage()
         });
     }
 
-    function btnGetMessage(act) {
-        $.get("/MainServlet?action=" + act, function (data, status) {
+    function init () {
+        btnGetMessage();
+    }
+
+
+    function btnGetMessage() {
+        $.get("/MainServlet?action=get&num="+count, function (data, status) {
             if (status == "success") {
                 if (data.length > 0) {
-                    $("#divResult").html(decodeURIComponent(data));
+                    var res = (decodeURIComponent(data)).split('^');
+                    var length=res.length;
+                    count+=length;
+                    var text=" ";
+                    for(var i=0;i<length;i++) {
+                        text+=res[i];
+                        text+="<br>"
+                    }
+                        document.getElementById("divResult").innerHTML = text;
+                  //  $("#divResult").html(decodeURIComponent(data));
                     $("#s").show();
+                    setTimeout(function () {
+                        btnGetMessage();
+                    }, 1000);
                 }
             }
         });
@@ -39,15 +50,13 @@
 
 
 </head>
-<body>
+<body onload="init()">
+<h1>welcome to my chat</h1>>
 write message  <input type="text" id="txtTest1">
 <br/>
-<input type="button" id="btnSendMessage" value="send message" onclick="btnSend('send')">
-<input type="button" id="btnGetMessage" value="get message" onclick="btnGetMessage('get')">
-<div id ="s" style="display:none">
-    <p> result</p>
-
-</div>
+<input type="button" id="btnSendMessage" value="send message" onclick="btnSend()">
+<!--<input type="button" id="btnGetMessage" value="get message" onclick="btnGetMessage()">-->
+<div id ="s" style="display:none"><p> result</p></div>
 <div id="divResult" ></div>
 </body>
 </html>
